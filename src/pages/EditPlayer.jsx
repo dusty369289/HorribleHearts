@@ -18,7 +18,7 @@ export default function EditPlayer({ player, onUpdatePlayer, onDeletePlayer, onC
   const handleKeyPress = (key) => {
     if (key === "←") {
       setName(name.slice(0, -1));
-    } else {
+    } else if (name.length < 10) {
       setName(name + key);
     }
   };
