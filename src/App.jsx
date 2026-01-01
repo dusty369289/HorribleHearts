@@ -13,7 +13,7 @@ export default function App() {
   // Check viewport width
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsScreenTooSmall(window.innerWidth < 768);
+      setIsScreenTooSmall(window.innerWidth < 600);
     };
     
     checkScreenSize();
