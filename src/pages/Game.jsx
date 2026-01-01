@@ -9,15 +9,24 @@ export default function Game({ players, setPlayers, onReset, onAddPlayer, onEdit
   const padding = 16;
   const gap = 16;
   const minCardHeight = 75; // Minimum height in pixels for each card
+  const maxCardHeight = 200; // Maximum height in pixels for each card
   const totalPadding = padding * 2; // top + bottom
   const totalGap = gap * (players.length - 1); // gaps between cards
   
-  // Calculate if cards would be too small
+  // Calculate card height with min and max constraints
   const availableHeight = window.innerHeight - totalPadding - totalGap;
   const calculatedCardHeight = availableHeight / players.length;
   const useMinHeight = calculatedCardHeight < minCardHeight;
+  const useMaxHeight = calculatedCardHeight > maxCardHeight;
   
-  const cardHeight = useMinHeight ? `${minCardHeight}px` : `calc((100vh - ${totalPadding}px - ${totalGap}px) / ${players.length})`;
+  let cardHeight;
+  if (useMinHeight) {
+    cardHeight = `${minCardHeight}px`;
+  } else if (useMaxHeight) {
+    cardHeight = `${maxCardHeight}px`;
+  } else {
+    cardHeight = `calc((100vh - ${totalPadding}px - ${totalGap}px) / ${players.length})`;
+  }
   
   const playerCardRefs = useRef([]);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -446,7 +455,7 @@ export default function Game({ players, setPlayers, onReset, onAddPlayer, onEdit
         width: '80vw',
         marginLeft: '10vw',
         boxSizing: 'border-box',
-        overflowY: useMinHeight ? 'auto' : 'visible'
+        overflowY: (useMinHeight || useMaxHeight) ? 'auto' : 'visible'
       }}>
         {players.map((player, i) => (
           <PlayerCard

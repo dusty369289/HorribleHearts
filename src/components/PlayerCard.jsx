@@ -127,10 +127,11 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
       </div>
 
       <div style={{ width: '33.33%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flex: 2, minHeight: 0, display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+        <div style={{ flex: 1, minHeight: 0, display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
           <h1 style={{
             fontWeight: 'bold',
             color: 'black',
+            fontSize: 40,
             margin: 0,
             lineHeight: 1
           }}>
