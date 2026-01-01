@@ -9,6 +9,8 @@ export default function App() {
   const [players, setPlayers] = useLocalStorage("players", []);
   const [editingPlayerIndex, setEditingPlayerIndex] = useState(null);
   const [isScreenTooSmall, setIsScreenTooSmall] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
 
   // Check viewport width
   useEffect(() => {
@@ -21,6 +23,30 @@ export default function App() {
     
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  // PWA Install Prompt
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      // Show install prompt after a short delay
+      setTimeout(() => setShowInstallPrompt(true), 3000);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    setDeferredPrompt(null);
+    setShowInstallPrompt(false);
+  };
 
   // Add 2 placeholder players if none exist on first load
   useEffect(() => {
@@ -56,6 +82,56 @@ export default function App() {
 
   return (
     <>
+      {/* PWA Install Prompt */}
+      {showInstallPrompt && deferredPrompt && (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#FF5555',
+          color: 'white',
+          padding: '15px 25px',
+          borderRadius: '10px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          zIndex: 10000,
+          display: 'flex',
+          gap: '15px',
+          alignItems: 'center',
+          maxWidth: '90vw'
+        }}>
+          <span style={{ fontWeight: 'bold' }}>Install Horrible Hearts on your device?</span>
+          <button
+            onClick={handleInstallClick}
+            style={{
+              backgroundColor: 'white',
+              color: '#FF5555',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Install
+          </button>
+          <button
+            onClick={() => setShowInstallPrompt(false)}
+            style={{
+              backgroundColor: 'transparent',
+              color: 'white',
+              border: '2px solid white',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {isScreenTooSmall ? (
         <div style={{
           display: 'flex',
