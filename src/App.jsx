@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Game from "./pages/Game";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useState, useEffect } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [screen, setScreen] = useState("game");
+  const [players, setPlayers] = useLocalStorage("players", []);
+
+  // Add 2 placeholder players if none exist on first load
+  useEffect(() => {
+    if (players.length === 0) {
+      setPlayers([
+        { name: "Player 1", score: 0 },
+        { name: "Player 2", score: 0 }
+      ]);
+    }
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {screen === "home" && <Home onStart={() => setScreen("setup")} />}
+      {screen === "setup" && (
+        <Setup
+          players={players}
+          setPlayers={setPlayers}
+          onStartGame={() => setScreen("game")}
+        />
+      )}
+      {screen === "game" && (
+        <Game
+          players={players}
+          setPlayers={setPlayers}
+          onReset={() => setScreen("home")}
+        />
+      )}
     </>
-  )
+  );
 }
-
-export default App
