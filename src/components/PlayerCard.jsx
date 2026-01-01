@@ -127,20 +127,22 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
       </div>
 
       <div style={{ width: '33.33%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ flex: 1, minHeight: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ flex: 2, minHeight: 0, display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
           <h1 style={{
             fontWeight: 'bold',
             color: 'black',
-            margin: 0
+            margin: 0,
+            lineHeight: 1
           }}>
             {player.score}
           </h1>
         </div>
-        <div style={{ flex: 1, minHeight: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ flex: 1, minHeight: 0, display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
           <h2 style={{
             fontWeight: 'bold',
             color: tempScore >= 0 ? 'green' : 'red',
             margin: 0,
+            lineHeight: 1,
             textShadow: '1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white'
           }}>
             {tempScore >= 0 ? '+' : ''}{tempScore}
