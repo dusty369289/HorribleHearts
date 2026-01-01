@@ -1,6 +1,6 @@
 import PlayerCard from "../components/PlayerCard";
 
-export default function Game({ players, setPlayers, onReset }) {
+export default function Game({ players, setPlayers, onReset, onAddPlayer, onEditPlayer }) {
   const padding = 16;
   const gap = 16;
   const totalPadding = padding * 2; // top + bottom
@@ -18,18 +18,21 @@ export default function Game({ players, setPlayers, onReset }) {
   return (
     <>
       {/* Top-left corner button */}
-      <button style={{
-        position: 'fixed',
-        top: 16,
-        left: 16,
-        backgroundColor: 'grey',
-        color: 'white',
-        padding: '8px 16px',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer'
-      }}>
-        Corner
+      <button 
+        onClick={onAddPlayer}
+        style={{
+          position: 'fixed',
+          top: 16,
+          left: 16,
+          backgroundColor: 'grey',
+          color: 'white',
+          padding: '8px 16px',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        Add Player
       </button>
 
       {/* Top-right corner button */}
@@ -94,6 +97,7 @@ export default function Game({ players, setPlayers, onReset }) {
             player={player}
             onChange={delta => updateScore(i, delta)}
             height={cardHeight}
+            onEditPlayer={() => onEditPlayer(i)}
           />
         ))}
       </div>
