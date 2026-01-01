@@ -91,6 +91,10 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
         .player-card-button {
           outline: none;
           cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .player-card-button:focus {
+          outline: none;
         }
         .player-card-button:active {
           background-color: rgba(0, 0, 0, 0.3) !important;
