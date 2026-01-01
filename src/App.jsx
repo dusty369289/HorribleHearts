@@ -3,6 +3,7 @@ import AddPlayer from "./pages/AddPlayer";
 import EditPlayer from "./pages/EditPlayer";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   const [screen, setScreen] = useState("game");
@@ -82,6 +83,7 @@ export default function App() {
 
   return (
     <>
+      <Analytics />
       {/* PWA Install Prompt */}
       {showInstallPrompt && deferredPrompt && (
         <div style={{
