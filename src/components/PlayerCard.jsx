@@ -7,6 +7,7 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
   const hasChangedRef = useRef(false);
   const currentSpeedRef = useRef(100);
   const [tempScore, setTempScore] = useState(0);
+  const [activeButton, setActiveButton] = useState(null); // Track which button is pressed
 
   const repeatWithAcceleration = (value) => {
     setTempScore(prev => prev + value);
@@ -22,6 +23,7 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
   const handleMouseDown = (e, value) => {
     e.preventDefault();
     console.log('Mouse down', value);
+    setActiveButton(value); // Set active button
     hasChangedRef.current = false;
     currentSpeedRef.current = 100;
     
@@ -35,6 +37,7 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
 
   const handleMouseUp = (e, value) => {
     e.preventDefault();
+    setActiveButton(null); // Clear active button
     console.log('Mouse up', value, 'hasChanged:', hasChangedRef.current);
     // Clear timeout and interval
     if (holdTimeoutRef.current) {
@@ -55,6 +58,7 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
 
   const handleMouseLeave = () => {
     console.log('Mouse leave');
+    setActiveButton(null); // Clear active button
     // Clear everything when mouse leaves button
     if (holdTimeoutRef.current) {
       clearTimeout(holdTimeoutRef.current);
@@ -86,11 +90,10 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
       <style>{`
         .player-card-button {
           outline: none;
-          transition: background-color 0.1s ease;
           cursor: pointer;
         }
         .player-card-button:active {
-          background-color: rgba(0, 0, 0, 0.2) !important;
+          background-color: rgba(0, 0, 0, 0.3) !important;
         }
       `}</style>
       <motion.div
@@ -154,7 +157,17 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
       <div style={{ width: '33.33%', height: '100%', display: "flex" }}>
         <button 
           className="player-card-button" 
-          style={{ flex: 1, fontSize: 24, backgroundColor: 'transparent', border: '2px solid black', color: 'black', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+          style={{ 
+            flex: 1, 
+            fontSize: 24, 
+            backgroundColor: activeButton === -1 ? 'rgba(0, 0, 0, 0.3)' : 'transparent', 
+            border: '2px solid black', 
+            color: 'black', 
+            fontWeight: 'bold', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }} 
           onMouseDown={(e) => handleMouseDown(e, -1)}
           onMouseUp={(e) => handleMouseUp(e, -1)}
           onTouchStart={(e) => handleMouseDown(e, -1)}
@@ -168,7 +181,17 @@ const PlayerCard = forwardRef(({ player, onChange, height, onEditPlayer }, ref) 
         </button>
         <button 
           className="player-card-button" 
-          style={{ flex: 1, fontSize: 24, backgroundColor: 'transparent', border: '2px solid black', color: 'black', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+          style={{ 
+            flex: 1, 
+            fontSize: 24, 
+            backgroundColor: activeButton === 1 ? 'rgba(0, 0, 0, 0.3)' : 'transparent', 
+            border: '2px solid black', 
+            color: 'black', 
+            fontWeight: 'bold', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }} 
           onMouseDown={(e) => handleMouseDown(e, 1)}
           onMouseUp={(e) => handleMouseUp(e, 1)}
           onTouchStart={(e) => handleMouseDown(e, 1)}
